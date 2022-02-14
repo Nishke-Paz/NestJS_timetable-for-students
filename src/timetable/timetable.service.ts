@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { GroupEntity } from './group.entity';
 import { TimetableEntity } from './timetable.entity';
+import { LessonEntity } from "./lesson.entity";
 
 @Injectable()
 export class TimetableService {
@@ -11,6 +12,8 @@ export class TimetableService {
     private groupRepository: Repository<GroupEntity>,
     @InjectRepository(TimetableEntity)
     private timetableRepository: Repository<TimetableEntity>,
+    @InjectRepository(LessonEntity)
+    private lessonRepository: Repository<LessonEntity>,
   ) {}
 
   async find(): Promise<GroupEntity[]> {
@@ -18,13 +21,31 @@ export class TimetableService {
   }
 
   async findAll(): Promise<GroupEntity[]> {
-    return await this.groupRepository.find({ relations: ['timetable'] });
+    return await this.groupRepository.find({
+      relations: [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+      ],
+    });
   }
 
   async findById(id: number): Promise<GroupEntity[]> {
     return await this.groupRepository.find({
       where: { id: id },
-      relations: ['timetable'],
+      relations: [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday'
+      ],
     });
   }
 
@@ -34,17 +55,20 @@ export class TimetableService {
 
   async addTimetable(
     id: number,
-    timetable: TimetableEntity,
-  ): Promise<GroupEntity> {
-    await this.timetableRepository.save(timetable);
+    dayOfTheWeek: string,
+    lesson: LessonEntity,
+  ): Promise<any> {
+    await this.lessonRepository.save(lesson);
     const groupById = await this.groupRepository.find({
       where: {
         id: id,
       },
-      relations: ['timetable'],
+      relations: [dayOfTheWeek],
     });
-    groupById[0].timetable = [...groupById[0].timetable, timetable];
+    groupById[0][dayOfTheWeek] = [...groupById[0][dayOfTheWeek], lesson];
     return this.groupRepository.save(groupById[0]);
+    // groupById[0].timetable = [...groupById[0].timetable, timetable];
+    // return this.groupRepository.save(groupById[0]);
   }
 
   async editTimetable(

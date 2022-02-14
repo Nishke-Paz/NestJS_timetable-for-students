@@ -11,6 +11,7 @@ import { GroupEntity } from './group.entity';
 import { TimetableService } from './timetable.service';
 import { TimetableEntity } from './timetable.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { LessonEntity } from './lesson.entity';
 
 @Controller('timetable')
 export class TimetableController {
@@ -36,12 +37,13 @@ export class TimetableController {
     return this.timetableService.create(groupData);
   }
 
-  @Put(':id/addTimetable')
+  @Put(':id/:dayOfWeek/addTimetable')
   async addTimetable(
     @Param('id') id,
-    @Body() timetableData: TimetableEntity,
+    @Param('dayOfWeek') dayOfWeek,
+    @Body() lesson: LessonEntity,
   ): Promise<GroupEntity> {
-    return this.timetableService.addTimetable(Number(id), timetableData);
+    return this.timetableService.addTimetable(Number(id), dayOfWeek, lesson);
   }
 
   @Put(':id/editTimetable')

@@ -1,22 +1,51 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { LessonEntity } from "./lesson.entity";
 
 @Entity()
 export class TimetableEntity {
   @PrimaryGeneratedColumn()
   private id: number;
 
-  @Column()
-  dayOfTheWeek: string;
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  monday: LessonEntity[];
 
-  @Column()
-  subject: string;
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  tuesday: LessonEntity[];
 
-  @Column()
-  teacher: string;
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  wednesday: LessonEntity[];
 
-  @Column()
-  lectureHall: string;
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  thursday: LessonEntity[];
 
-  @Column()
-  time: string;
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  friday: LessonEntity[];
+
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  saturday: LessonEntity[];
+
+  @ManyToMany((type) => LessonEntity)
+  @JoinTable()
+  sunday: LessonEntity[];
+
+  // @Column()
+  // dayOfTheWeek: string;
+  //
+  // @Column()
+  // subject: string;
+  //
+  // @Column()
+  // teacher: string;
+  //
+  // @Column()
+  // lectureHall: string;
+  //
+  // @Column()
+  // time: string;
 }
