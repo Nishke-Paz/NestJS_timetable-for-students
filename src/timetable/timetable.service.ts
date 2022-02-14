@@ -21,6 +21,13 @@ export class TimetableService {
     return await this.groupRepository.find({ relations: ['timetable'] });
   }
 
+  async findById(id: number): Promise<GroupEntity[]> {
+    return await this.groupRepository.find({
+      where: { id: id },
+      relations: ['timetable'],
+    });
+  }
+
   async create(group: GroupEntity): Promise<GroupEntity> {
     return await this.groupRepository.save(group);
   }

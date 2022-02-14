@@ -21,6 +21,11 @@ export class TimetableController {
     return this.timetableService.find();
   }
 
+  @Post('findById')
+  async groupById(@Body() idObj: { id: number }): Promise<GroupEntity[]> {
+    return this.timetableService.findById(Number(idObj.id));
+  }
+
   @Get('relations')
   getRel(): Promise<GroupEntity[]> {
     return this.timetableService.findAll();
