@@ -63,4 +63,9 @@ export class TimetableController {
   async deleteTimetable(@Param('id') id): Promise<DeleteResult> {
     return this.timetableService.deleteTimetable(id);
   }
+
+  @Delete(':id/deleteLesson')
+  async deleteLesson(@Param('id') id): Promise<DeleteResult> {
+    return this.timetableService.deleteLesson(id);
+  }
 }
