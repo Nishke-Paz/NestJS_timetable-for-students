@@ -93,10 +93,27 @@ export class TimetableService {
   }
 
   async editTimetable(
-    id: number,
-    timetable: TimetableEntity,
-  ): Promise<UpdateResult> {
-    return await this.timetableRepository.update(id, timetable);
+    idLesson: number,
+    idGroup: number,
+    dayOfTheWeek: string,
+    lesson: LessonEntity,
+  ): Promise<any> {
+    const groupById = await this.groupRepository.find({
+      where: {
+        id: idGroup,
+      },
+      relations: [dayOfTheWeek],
+    });
+    const currentLesson = groupById[0][dayOfTheWeek].find(
+      (lesson) => lesson.id === idLesson,
+    );
+    if (currentLesson) {
+      return await this.lessonRepository.update(idLesson, lesson);
+    }
+    await this.lessonRepository.delete(idLesson);
+    await this.lessonRepository.save(lesson);
+    groupById[0][dayOfTheWeek] = [...groupById[0][dayOfTheWeek], lesson];
+    return this.groupRepository.save(groupById[0]);
   }
 
   async delete(id): Promise<DeleteResult> {

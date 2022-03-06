@@ -46,12 +46,19 @@ export class TimetableController {
     return this.timetableService.addTimetable(Number(id), dayOfWeek, lesson);
   }
 
-  @Put(':id/editTimetable')
+  @Put(':idLesson/:idGroup/:dayOfTheWeek/editTimetable')
   async editTimetable(
-    @Param('id') id,
-    @Body() timetable: TimetableEntity,
+    @Param('idLesson') idLesson,
+    @Param('idGroup') idGroup,
+    @Param('dayOfTheWeek') dayOfTheWeek,
+    @Body() lesson: LessonEntity,
   ): Promise<UpdateResult> {
-    return this.timetableService.editTimetable(Number(id), timetable);
+    return this.timetableService.editTimetable(
+      Number(idLesson),
+      Number(idGroup),
+      dayOfTheWeek,
+      lesson,
+    );
   }
 
   @Delete(':id/delete')
